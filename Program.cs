@@ -66,7 +66,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Loja.Api",
+        Title = "Template.Api",
         Version = "v1",
         Description = "",
         Contact = new OpenApiContact()
