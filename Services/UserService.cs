@@ -1,9 +1,9 @@
-﻿using Loja.Api.Models.Dtos;
-using Loja.Api.Models.Entities;
-using Loja.Api.Repositories;
-using Loja.Api.Services.Interface;
+﻿using Template.Api.Models.Dtos;
+using Template.Api.Models.Entities;
+using Template.Api.Repositories;
+using Template.Api.Services.Interface;
 
-namespace Loja.Api.Services
+namespace Template.Api.Services
 {
     public class UserService : IUserService
     {

@@ -1,7 +1,7 @@
-﻿using Loja.Api.Models.Entities;
+﻿using Template.Api.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Loja.Api.Data
+namespace Template.Api.Data
 {
     public class AppDbContext : DbContext
     {

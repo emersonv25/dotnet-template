@@ -1,12 +1,12 @@
-﻿using Loja.Api.Models.Dtos;
-using Loja.Api.Models.Entities;
-using Loja.Api.Services.Interface;
+﻿using Template.Api.Models.Dtos;
+using Template.Api.Models.Entities;
+using Template.Api.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
-namespace Loja.Api.Controllers
+namespace Template.Api.Controllers
 {
     [Route("api/[controller]")]
     [Authorize]

@@ -1,9 +1,9 @@
 ﻿using System.Security.Claims;
 
-namespace Loja.Api.Services.Interface
+namespace Template.Api.Services.Interface
 {
     public interface IAuthService
     {
-        string GetFirebaseUidFromIdentity(ClaimsIdentity claimsIdentity);
+        string? GetFirebaseUidFromIdentity(ClaimsIdentity claimsIdentity);
     }
 }

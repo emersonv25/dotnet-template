@@ -1,8 +1,8 @@
-﻿using Loja.Api.Models.Entities;
+﻿using Template.Api.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Loja.Api.Controllers
+namespace Template.Api.Controllers
 {
     public class BaseController : ControllerBase
     {
@@ -10,24 +10,17 @@ namespace Loja.Api.Controllers
         {
             get
             {
-                if (HttpContext.Items.TryGetValue("User", out var user))
-                {
-                    return user as User;
-                }
-                return null;
+#pragma warning disable CS8603
+                return HttpContext.Items["User"] as User;
             }
         }
         protected string FirebaseUid
         {
             get
             {
-                if (HttpContext.Items.TryGetValue("FirebaseUid", out var firebaseUid))
-                {
-                    return firebaseUid as string;
-                }
-                return null;
+#pragma warning disable CS8603
+                return HttpContext.Items["FirebaseUid"] as string;
             }
-
         }
     }
 }

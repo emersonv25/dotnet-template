@@ -1,20 +1,26 @@
-﻿using Loja.Api.Repositories;
-using Loja.Api.Services.Interface;
+﻿using Template.Api.Repositories;
+using Template.Api.Services.Interface;
 using System.Security.Claims;
 
-namespace Loja.Api.Services
+namespace Template.Api.Services
 {
     public class AuthService : IAuthService
     {
-        public string GetFirebaseUidFromIdentity(ClaimsIdentity claimsIdentity)
+        public string? GetFirebaseUidFromIdentity(ClaimsIdentity claimsIdentity)
         {
-            string userId = TokenValidade(claimsIdentity);
-            return userId;
+            return TokenValidade(claimsIdentity);
         }
 
-        private string TokenValidade(ClaimsIdentity claimsIdentity)
+        private string? TokenValidade(ClaimsIdentity claimsIdentity)
         {
-            return claimsIdentity.Claims.ToList().FirstOrDefault(x => x.Type == "user_id").Value;
+            var userId = claimsIdentity.Claims.ToList().FirstOrDefault(x => x.Type == "user_id");
+
+            if (userId != null)
+            {
+                return userId.Value;
+            }
+            else
+                return null;
         }
     }
 }

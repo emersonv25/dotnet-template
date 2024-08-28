@@ -1,11 +1,11 @@
 ﻿
-using Loja.Api.Repositories;
-using Loja.Api.Services.Interface;
+using Template.Api.Repositories;
+using Template.Api.Services.Interface;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Claims;
 
-namespace Loja.Api.Filters
+namespace Template.Api.Filters
 {
     public class FirebaseFilter : IAuthorizationFilter
     {
@@ -20,7 +20,7 @@ namespace Loja.Api.Filters
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var claimsIdentity = context.HttpContext.User.Identity as ClaimsIdentity;
-            if (claimsIdentity != null)
+            if (claimsIdentity != null && claimsIdentity.IsAuthenticated)
             {
                 string firebaseUid = _authService.GetFirebaseUidFromIdentity(claimsIdentity);
 

@@ -1,10 +1,10 @@
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
-using Loja.Api.Data;
-using Loja.Api.Filters;
-using Loja.Api.Repositories;
-using Loja.Api.Services;
-using Loja.Api.Services.Interface;
+using Template.Api.Data;
+using Template.Api.Filters;
+using Template.Api.Repositories;
+using Template.Api.Services;
+using Template.Api.Services.Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

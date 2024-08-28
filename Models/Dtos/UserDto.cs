@@ -1,4 +1,4 @@
-﻿namespace Loja.Api.Models.Dtos
+﻿namespace Template.Api.Models.Dtos
 {
     public class UserDto
     {

@@ -1,8 +1,8 @@
-﻿using Loja.Api.Data;
-using Loja.Api.Models.Entities;
+﻿using Template.Api.Data;
+using Template.Api.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Loja.Api.Repositories
+namespace Template.Api.Repositories
 {
     public class UserRepository : IUserRepository
     {

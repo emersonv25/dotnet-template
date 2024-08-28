@@ -1,6 +1,6 @@
-﻿using Loja.Api.Models.Entities;
+﻿using Template.Api.Models.Entities;
 
-namespace Loja.Api.Repositories
+namespace Template.Api.Repositories
 {
     public interface IUserRepository
     {

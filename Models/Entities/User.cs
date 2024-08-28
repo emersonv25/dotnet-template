@@ -1,8 +1,8 @@
-﻿using Loja.Api.Models.Dtos;
+﻿using Template.Api.Models.Dtos;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace Loja.Api.Models.Entities
+namespace Template.Api.Models.Entities
 {
     public class User
     {

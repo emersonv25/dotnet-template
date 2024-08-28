@@ -1,7 +1,7 @@
-﻿using Loja.Api.Models.Dtos;
-using Loja.Api.Models.Entities;
+﻿using Template.Api.Models.Dtos;
+using Template.Api.Models.Entities;
 
-namespace Loja.Api.Services.Interface
+namespace Template.Api.Services.Interface
 {
     public interface IUserService
     {
