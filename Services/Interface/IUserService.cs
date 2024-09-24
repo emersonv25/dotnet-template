@@ -1,7 +1,7 @@
-﻿using Template.Api.Models.Dtos;
-using Template.Api.Models.Entities;
+﻿using Template.API.Models.Dtos;
+using Template.API.Models.Entities;
 
-namespace Template.Api.Services.Interface
+namespace Template.API.Services.Interface
 {
     public interface IUserService
     {

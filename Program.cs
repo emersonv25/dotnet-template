@@ -1,10 +1,10 @@
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
-using Template.Api.Data;
-using Template.Api.Filters;
-using Template.Api.Repositories;
-using Template.Api.Services;
-using Template.Api.Services.Interface;
+using Template.API.Data;
+using Template.API.Filters;
+using Template.API.Repositories;
+using Template.API.Services;
+using Template.API.Services.Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -66,7 +66,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Template.Api",
+        Title = "Template.API",
         Version = "v1",
         Description = "",
         Contact = new OpenApiContact()

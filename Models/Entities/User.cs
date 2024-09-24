@@ -1,8 +1,8 @@
-﻿using Template.Api.Models.Dtos;
+﻿using Template.API.Models.Dtos;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace Template.Api.Models.Entities
+namespace Template.API.Models.Entities
 {
     public class User
     {

@@ -1,7 +1,7 @@
-﻿using Template.Api.Models.Entities;
+﻿using Template.API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Template.Api.Data
+namespace Template.API.Data
 {
     public class AppDbContext : DbContext
     {

@@ -1,8 +1,8 @@
-﻿using Template.Api.Data;
-using Template.Api.Models.Entities;
+﻿using Template.API.Data;
+using Template.API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Template.Api.Repositories
+namespace Template.API.Repositories
 {
     public class UserRepository : IUserRepository
     {

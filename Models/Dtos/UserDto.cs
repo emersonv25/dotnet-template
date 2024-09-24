@@ -1,4 +1,4 @@
-﻿namespace Template.Api.Models.Dtos
+﻿namespace Template.API.Models.Dtos
 {
     public class UserDto
     {

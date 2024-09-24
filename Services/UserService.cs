@@ -1,9 +1,9 @@
-﻿using Template.Api.Models.Dtos;
-using Template.Api.Models.Entities;
-using Template.Api.Repositories;
-using Template.Api.Services.Interface;
+﻿using Template.API.Models.Dtos;
+using Template.API.Models.Entities;
+using Template.API.Repositories;
+using Template.API.Services.Interface;
 
-namespace Template.Api.Services
+namespace Template.API.Services
 {
     public class UserService : IUserService
     {

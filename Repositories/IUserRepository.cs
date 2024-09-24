@@ -1,6 +1,6 @@
-﻿using Template.Api.Models.Entities;
+﻿using Template.API.Models.Entities;
 
-namespace Template.Api.Repositories
+namespace Template.API.Repositories
 {
     public interface IUserRepository
     {

@@ -1,8 +1,8 @@
-﻿using Template.Api.Repositories;
-using Template.Api.Services.Interface;
+﻿using Template.API.Repositories;
+using Template.API.Services.Interface;
 using System.Security.Claims;
 
-namespace Template.Api.Services
+namespace Template.API.Services
 {
     public class AuthService : IAuthService
     {

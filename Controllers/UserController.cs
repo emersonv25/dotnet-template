@@ -1,12 +1,12 @@
-﻿using Template.Api.Models.Dtos;
-using Template.Api.Models.Entities;
-using Template.Api.Services.Interface;
+﻿using Template.API.Models.Dtos;
+using Template.API.Models.Entities;
+using Template.API.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
-namespace Template.Api.Controllers
+namespace Template.API.Controllers
 {
     [Route("api/[controller]")]
     [Authorize]

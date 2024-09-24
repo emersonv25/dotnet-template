@@ -1,8 +1,8 @@
-﻿using Template.Api.Models.Entities;
+﻿using Template.API.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Template.Api.Controllers
+namespace Template.API.Controllers
 {
     public class BaseController : ControllerBase
     {

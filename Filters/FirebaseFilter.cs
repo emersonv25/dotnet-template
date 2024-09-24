@@ -1,11 +1,11 @@
 ﻿
-using Template.Api.Repositories;
-using Template.Api.Services.Interface;
+using Template.API.Repositories;
+using Template.API.Services.Interface;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Claims;
 
-namespace Template.Api.Filters
+namespace Template.API.Filters
 {
     public class FirebaseFilter : IAuthorizationFilter
     {
