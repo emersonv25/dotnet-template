@@ -1,20 +1,28 @@
-﻿using Template.Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using Template.Domain.Entities;
 
-namespace Ecommerce.API.Models.Dtos
+namespace Template.Application.DTOs
 {
-    public class UserDto
+    public class UserRequestDto
     {
+        [Required]
+        [StringLength(100)]
         public required string Name { get; set; }
+
+        [Required]
+        [EmailAddress]
+        [StringLength (255)]
         public required string Email { get; set; }
     }
-    public class UserUpdateDto
+
+    public class UserResponseDto
     {
-        public string Name { get; set; }
+
     }
 
     public class CreateUser : User
     {
-        public CreateUser(UserDto dto, string firebaseId) : base(dto.Name, dto.Email, firebaseId)
+        public CreateUser(UserRequestDto dto, string firebaseId) : base(dto.Name, dto.Email, firebaseId)
         {
         }
     }

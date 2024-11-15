@@ -26,9 +26,20 @@ namespace Template.Data.Repositories
             return await _context.Users.FirstOrDefaultAsync(u => u.FirebaseId == firebaseId);
         }
 
-        public async Task AddAsync(User user)
+        public async Task AddAsync(User user, Guid? createdBy)
         {
+            user.CreatedBy = createdBy;
+
             await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+        }
+        public async Task UpdateAsync(User user, Guid updateBy)
+        {
+            user.UpdatedAt = DateTime.UtcNow;
+            user.UpdateBy = updateBy;
+
+            _context.Users.Update(user);
+            _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
     }

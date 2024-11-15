@@ -10,11 +10,13 @@ namespace Template.Api.Models
     {
         public string Id { get; set; }
         public string Email { get; set; } 
+        public string Name { get; set; }
 
-        public FirebaseUser(string id, string email)
+        public FirebaseUser(string id, string email, string name)
         {
             Id = id;
             Email = email;
+            Name = name;
         }
     }
 }

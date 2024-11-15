@@ -4,6 +4,9 @@ using Template.Api.Models;
 using Template.Application.Interfaces;
 using Template.Domain.Entities;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Template.Api.DTOs;
+using Template.Application.DTOs;
 
 namespace Template.Api.Middlewares
 {
@@ -47,12 +50,15 @@ namespace Template.Api.Middlewares
             var user = await userService.GetUserByFirebaseIdAsync(firebaseUser.Id);
             if (user == null)
             {
+                user = await userService.CreateOrUpdateUser(new UserRequestDto { Name = firebaseUser.Name, Email = firebaseUser.Email }, firebaseUser.Id);
+                
                 // Retorna erro 401 se o usuário não for encontrado.
-                await RespondUnauthorizedAsync(context, "Unauthorized: User not found.");
-                return;
+                //await RespondUnauthorizedAsync(context, "Unauthorized: User not found.");
+                //return;
             }
 
             // Adiciona o usuário ao contexto da requisição para ser acessado em outros lugares.
+            context.Items["FirebaseId"] = firebaseUser.Id;
             context.Items["User"] = user;
 
             // Chama o próximo middleware na cadeia.
@@ -70,9 +76,9 @@ namespace Template.Api.Middlewares
                 // Verifica o token Firebase de maneira assíncrona.
                 var decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(tokenValue);
                 var email = decodedToken.Claims.TryGetValue("email", out var emailClaim) ? emailClaim.ToString() : string.Empty;
-
+                var name = decodedToken.Claims.TryGetValue("name", out var nameClaim) ? nameClaim.ToString() : string.Empty;
                 // Retorna o usuário do Firebase.
-                return new FirebaseUser(decodedToken.Uid, email);
+                return new FirebaseUser(decodedToken.Uid, email, name);
             }
             catch (FirebaseAuthException ex)
             {
@@ -85,8 +91,10 @@ namespace Template.Api.Middlewares
         private static async Task RespondUnauthorizedAsync(HttpContext context, string message)
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            // Escreve a resposta de erro em formato JSON.
-            await context.Response.WriteAsJsonAsync(new { error = message });
+
+            var errorResponse = new ErrorResponseDto(StatusCodes.Status401Unauthorized, message, null);
+
+            await context.Response.WriteAsJsonAsync(errorResponse);
         }
     }
 

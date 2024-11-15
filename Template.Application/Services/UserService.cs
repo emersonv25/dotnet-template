@@ -2,7 +2,8 @@
 using Template.Domain.Interfaces;
 using Template.Application.Interfaces;
 using System.Threading.Tasks;
-using Ecommerce.API.Models.Dtos;
+using Template.Application.DTOs;
+using System.ComponentModel.DataAnnotations;
 
 namespace Template.Application.Services
 {
@@ -23,16 +24,18 @@ namespace Template.Application.Services
         {
             return await _userRepository.GetByIdAsync(id);
         }
-        public async Task<User> CreateUser(UserDto userDto, string firebaseUid)
+        public async Task<User> CreateOrUpdateUser(UserRequestDto userDto, string firebaseId)
         {
-            var existUser = _userRepository.GetByFirebaseIdAsync(firebaseUid);
+            var existUser = await _userRepository.GetByFirebaseIdAsync(firebaseId);
             if (existUser != null)
-                throw new Exception("User already exists");
+            {
+                existUser.UpdateName(userDto.Name);
+                await _userRepository.UpdateAsync(existUser, existUser.Id);
+                return existUser;
+            }
 
-            var newUser = new CreateUser(userDto, firebaseUid);
-
-            await _userRepository.AddAsync(newUser);
-
+            var newUser = new CreateUser(userDto, firebaseId);
+            await _userRepository.AddAsync(newUser, null);
             return newUser;
         }
     }

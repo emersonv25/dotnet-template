@@ -1,19 +1,15 @@
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Template.Application.Services;
-using Template.Data;
-using Template.Domain.Interfaces;
-using Template.Application.Interfaces;
 using System.Text.Json;
 using Template.Api.Middlewares;
 using Microsoft.OpenApi.Models;
 using Template.Api.Utils;
-using Template.Data.Repositories;
-using Template.Application;
 using Template.Api;
+using Microsoft.AspNetCore.Mvc;
+using Template.Api.DTOs;
+using Template.Api.Filters;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,7 +48,23 @@ builder.Services
 builder.Services.AddAuthorization();
 
 // Adiciona serviços de controle
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ApiResponseFilter>();
+}).ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var errors = context.ModelState
+            .Where(e => e.Value.Errors.Count > 0)
+            .SelectMany(e => e.Value.Errors.Select(x => x.ErrorMessage))
+            .ToArray();
+
+        var errorResponse = new ErrorResponseDto(StatusCodes.Status400BadRequest, "Validation failed", errors);
+
+        return new BadRequestObjectResult(errorResponse);
+    };
+});
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -74,7 +86,6 @@ builder.Services.AddSwaggerGen(c =>
 
 });
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -85,8 +96,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthentication();
-app.UseMiddleware<FirebaseAuthMiddleware>();
 app.UseAuthorization();
+
+// Middlewares
+app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<FirebaseAuthMiddleware>();
 
 app.MapControllers();
 app.Run();

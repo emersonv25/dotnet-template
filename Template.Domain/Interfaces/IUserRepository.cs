@@ -6,6 +6,7 @@ namespace Template.Domain.Interfaces
     {
         Task<User?> GetByIdAsync(Guid id);
         Task<User?> GetByFirebaseIdAsync(string firebaseId);
-        Task AddAsync(User user);
+        Task UpdateAsync(User user, Guid updatedBy);
+        Task AddAsync(User user, Guid? createdBy);
     }
 }

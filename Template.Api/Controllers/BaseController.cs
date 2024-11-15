@@ -13,5 +13,13 @@ namespace Template.Api.Controllers
                 return HttpContext.Items["User"] as User;
             }
         }
+
+        protected string FirebaseId
+        {
+            get
+            {
+                return HttpContext.Items["FirebaseId"] as string;
+            }
+        }
     }
 }
