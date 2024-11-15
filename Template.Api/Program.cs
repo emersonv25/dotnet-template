@@ -5,7 +5,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
 using Template.Api.Middlewares;
 using Microsoft.OpenApi.Models;
-using Template.Api.Utils;
 using Template.Api;
 using Microsoft.AspNetCore.Mvc;
 using Template.Api.DTOs;

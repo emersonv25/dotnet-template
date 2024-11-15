@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Template.Api.Utils;
+namespace Template.Api.Filters;
 
 public class AuthorizeCheckOperationFilter : IOperationFilter
 {
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
         var hasAuthorize = context.MethodInfo.DeclaringType.GetCustomAttributes(true)
-            .OfType<AuthorizeAttribute>().Any() || 
+            .OfType<AuthorizeAttribute>().Any() ||
             context.MethodInfo.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any();
 
         var allowAnonymous = context.MethodInfo.GetCustomAttributes(true)

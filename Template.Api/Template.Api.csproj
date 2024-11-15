@@ -28,4 +28,8 @@
     <ProjectReference Include="..\Template.Infra.Ioc\Template.Infra.Ioc.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Utils\" />
+  </ItemGroup>
+
 </Project>
