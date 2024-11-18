@@ -1,6 +1,5 @@
 ﻿using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Http;
-using Template.Api.Models;
 using Template.Application.Interfaces;
 using Template.Domain.Entities;
 using System.Threading.Tasks;
@@ -50,7 +49,7 @@ namespace Template.Api.Middlewares
             var user = await userService.GetUserByFirebaseIdAsync(firebaseUser.Id);
             if (user == null)
             {
-                user = await userService.CreateOrUpdateUser(new UserRequestDto { Name = firebaseUser.Name, Email = firebaseUser.Email }, firebaseUser.Id);
+                user = await userService.CreateOrUpdateUser(new UserDTO { Name = firebaseUser.Name, Email = firebaseUser.Email }, firebaseUser.Id);
                 
                 // Retorna erro 401 se o usuário não for encontrado.
                 //await RespondUnauthorizedAsync(context, "Unauthorized: User not found.");
@@ -69,7 +68,7 @@ namespace Template.Api.Middlewares
         private static string ExtractToken(string token) => token.Replace("Bearer ", string.Empty).Trim();
 
         // Valida o token no Firebase e retorna o usuário.
-        private async Task<FirebaseUser?> AuthenticateTokenAsync(string tokenValue)
+        private async Task<FirebaseUserDTO?> AuthenticateTokenAsync(string tokenValue)
         {
             try
             {
@@ -78,7 +77,7 @@ namespace Template.Api.Middlewares
                 var email = decodedToken.Claims.TryGetValue("email", out var emailClaim) ? emailClaim.ToString() : string.Empty;
                 var name = decodedToken.Claims.TryGetValue("name", out var nameClaim) ? nameClaim.ToString() : string.Empty;
                 // Retorna o usuário do Firebase.
-                return new FirebaseUser(decodedToken.Uid, email, name);
+                return new FirebaseUserDTO(decodedToken.Uid, email, name);
             }
             catch (FirebaseAuthException ex)
             {
@@ -92,7 +91,7 @@ namespace Template.Api.Middlewares
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
 
-            var errorResponse = new ErrorResponseDto(StatusCodes.Status401Unauthorized, message, null);
+            var errorResponse = new ErrorResponseDTO(StatusCodes.Status401Unauthorized, message, null);
 
             await context.Response.WriteAsJsonAsync(errorResponse);
         }

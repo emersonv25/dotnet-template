@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Template.Api.Models
+namespace Template.Api.DTOs
 {
-    public class FirebaseUser
+    public class FirebaseUserDTO
     {
         public string Id { get; set; }
-        public string Email { get; set; } 
+        public string Email { get; set; }
         public string Name { get; set; }
 
-        public FirebaseUser(string id, string email, string name)
+        public FirebaseUserDTO(string id, string email, string name)
         {
             Id = id;
             Email = email;

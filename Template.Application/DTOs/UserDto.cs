@@ -3,7 +3,7 @@ using Template.Domain.Entities;
 
 namespace Template.Application.DTOs
 {
-    public class UserRequestDto
+    public class UserDTO
     {
         [Required]
         [StringLength(100)]
@@ -13,18 +13,18 @@ namespace Template.Application.DTOs
         [EmailAddress]
         [StringLength (255)]
         public required string Email { get; set; }
-    }
 
-    public class UserResponseDto
-    {
-        public string Name { get; set; }
-        public string Email { get; set; }
-
+        public UserDTO() { }
+        public UserDTO(User user)
+        {
+            Name = user.Name;
+            Email = user.Email;
+        }
     }
 
     public class CreateUser : User
     {
-        public CreateUser(UserRequestDto dto, string firebaseId) : base(dto.Name, dto.Email, firebaseId)
+        public CreateUser(UserDTO dto, string firebaseId) : base(dto.Name, dto.Email, firebaseId)
         {
         }
     }

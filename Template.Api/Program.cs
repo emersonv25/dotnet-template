@@ -47,10 +47,7 @@ builder.Services
 builder.Services.AddAuthorization();
 
 // Adiciona serviços de controle
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add<ApiResponseFilter>();
-}).ConfigureApiBehaviorOptions(options =>
+builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
 {
     options.InvalidModelStateResponseFactory = context =>
     {
@@ -59,7 +56,7 @@ builder.Services.AddControllers(options =>
             .SelectMany(e => e.Value.Errors.Select(x => x.ErrorMessage))
             .ToArray();
 
-        var errorResponse = new ErrorResponseDto(StatusCodes.Status400BadRequest, "Validation failed", errors);
+        var errorResponse = new ErrorResponseDTO(StatusCodes.Status400BadRequest, "Validation failed", errors);
 
         return new BadRequestObjectResult(errorResponse);
     };

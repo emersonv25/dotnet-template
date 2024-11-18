@@ -60,9 +60,9 @@ namespace Template.Api.Middlewares
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
 
-            var errorResponse = new ErrorResponseDto(context.Response.StatusCode, message, errors);
+            var errorResponse = new ErrorResponseDTO(context.Response.StatusCode, message, errors);
 
-            return context.Response.WriteAsync(JsonConvert.SerializeObject(errorResponse));
+            return context.Response.WriteAsJsonAsync(errorResponse);
         }
     }
 

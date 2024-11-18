@@ -4,6 +4,8 @@ using Template.Domain.Entities;
 using Template.Domain.Interfaces;
 using System;
 using System.Threading.Tasks;
+using Template.Domain.Pagination;
+using Template.Infra.Data.Helpers;
 
 namespace Template.Data.Repositories
 {
@@ -15,7 +17,11 @@ namespace Template.Data.Repositories
         {
             _context = context;
         }
-
+        public async Task<PagedList<User>> GetAllAsync(int pageNumber, int pageSize)
+        {
+            var query =  _context.Users.AsQueryable();
+            return await PaginationHelper.CreateAsync(query, pageNumber, pageSize); ;
+        }
         public async Task<User?> GetByIdAsync(Guid id)
         {
             return await _context.Users.FindAsync(id);

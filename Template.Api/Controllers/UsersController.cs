@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using Template.Api.Models;
+using Template.Api.DTOs;
+using Template.Api.Extension;
 using Template.Application.DTOs;
 using Template.Application.Interfaces;
 using Template.Application.Services;
@@ -45,15 +46,34 @@ namespace Template.Api.Controllers
             return Ok(user);
         }
 
+        [HttpGet("Throw")]
+        [AllowAnonymous]
+        public IActionResult Throw()
+        {
+            throw new KeyNotFoundException("User not found.");
+        }
+
+        [HttpGet("All")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllAsync([FromQuery]PagionationParamsDTO pagionationParams)
+        {
+            var usersDTO = await _userService.GetAllAsync(pagionationParams.PageNumber, pagionationParams.PageSize);
+
+            var result = new PaginationResultDTO<UserDTO>(usersDTO, usersDTO.CurrentPage, usersDTO.PageSize, usersDTO.TotalCount, usersDTO.TotalPages);
+            
+            return Ok(result);
+        }
+
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] UserRequestDto userDto)
+        [AllowAnonymous]
+        public async Task<IActionResult> CreateUser([FromBody] UserDTO userDTO)
         {
             if (FirebaseId == null)
             {
                 throw new UnauthorizedAccessException("Unathorized: User not logged");
             }
 
-            var createdUser = await _userService.CreateOrUpdateUser(userDto, FirebaseId);
+            var createdUser = await _userService.CreateOrUpdateUser(userDTO, FirebaseId);
             return Ok(createdUser);
         }
 
