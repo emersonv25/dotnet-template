@@ -5,20 +5,8 @@ namespace Template.Api.Controllers
 {
     public class BaseController : ControllerBase
     {
-        protected User CurrentUser
-        {
-            get
-            {
-                return HttpContext.Items["User"] as User;
-            }
-        }
+        protected User? CurrentUser => HttpContext.Items["User"] as User;
 
-        protected string FirebaseId
-        {
-            get
-            {
-                return HttpContext.Items["FirebaseId"] as string;
-            }
-        }
+        protected string? FirebaseId => HttpContext.Items["FirebaseId"] as string;
     }
 }

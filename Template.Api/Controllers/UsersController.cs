@@ -35,22 +35,19 @@ namespace Template.Api.Controllers
         public async Task<IActionResult> GetUserFirebaseProfile(string firebaseid)
         {
             var user = await _userService.GetUserByFirebaseIdAsync(firebaseid);
+            if(user is null)
+            {
+                return NotFound("User not found");
+            }
             return Ok(user);
         }
 
 
-        [HttpGet()]
+        [HttpGet("LoggedUser")]
         public IActionResult GetLoggedUser()
         {
             var user = CurrentUser;
             return Ok(user);
-        }
-
-        [HttpGet("Throw")]
-        [AllowAnonymous]
-        public IActionResult Throw()
-        {
-            throw new KeyNotFoundException("User not found.");
         }
 
         [HttpGet("All")]
@@ -61,9 +58,8 @@ namespace Template.Api.Controllers
             return Ok(result); 
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> CreateUser([FromBody] UserDTO userDTO)
+        [HttpPut("CreateOrUpdate")]
+        public async Task<IActionResult> CreateOrUpdateUser([FromBody] UserDTO userDTO)
         {
             if (FirebaseId == null)
             {

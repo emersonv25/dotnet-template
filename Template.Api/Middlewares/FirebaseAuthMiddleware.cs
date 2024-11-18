@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Template.Application.Interfaces;
 using Template.Domain.Entities;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using Template.Api.DTOs;
 using Template.Application.DTOs;
+using FirebaseAdmin.Messaging;
 
 namespace Template.Api.Middlewares
 {
@@ -21,7 +21,9 @@ namespace Template.Api.Middlewares
         public async Task InvokeAsync(HttpContext context, IUserService userService)
         {
             // Verifica se o token de autenticação está presente nos cabeçalhos da requisição.
-            if (!context.Request.Headers.TryGetValue("Authorization", out var token))
+            string token = context.Request.Headers.Authorization.ToString();
+
+            if (string.IsNullOrWhiteSpace(token))
             {
                 // Se não houver token, apenas passa para o próximo middleware.
                 await _next(context);
@@ -47,13 +49,29 @@ namespace Template.Api.Middlewares
 
             // Tenta buscar o usuário correspondente no sistema.
             var user = await userService.GetUserByFirebaseIdAsync(firebaseUser.Id);
+            // Permitir acesso ao endpoint de criação/atualização de usuário mesmo que o usuário não esteja no banco.
             if (user == null)
             {
-                user = await userService.CreateOrUpdateUser(new UserDTO { Name = firebaseUser.Name, Email = firebaseUser.Email }, firebaseUser.Id);
-                
-                // Retorna erro 401 se o usuário não for encontrado.
-                //await RespondUnauthorizedAsync(context, "Unauthorized: User not found.");
-                //return;
+                var isUserCreateEndpoint = IsUserCreationOrUpdateEndpoint(context);
+
+
+                if (!string.IsNullOrWhiteSpace(firebaseUser.Name) && !string.IsNullOrWhiteSpace(firebaseUser.Email))
+                {
+                    user = await userService.CreateOrUpdateUser(new UserDTO(firebaseUser.Name, firebaseUser.Email), firebaseUser.Id);
+
+                    if(isUserCreateEndpoint)
+                    {
+                        context.Response.StatusCode = StatusCodes.Status200OK;
+                        await context.Response.WriteAsJsonAsync(user);
+                        return;
+                    }
+                }
+                else if (!isUserCreateEndpoint)
+                {
+                    // Retorna 401 para outros endpoints.
+                    await RespondUnauthorizedAsync(context, "Unauthorized: User not found.");
+                    return;
+                }
             }
 
             // Adiciona o usuário ao contexto da requisição para ser acessado em outros lugares.
@@ -81,7 +99,7 @@ namespace Template.Api.Middlewares
             }
             catch (FirebaseAuthException ex)
             {
-                // Em caso de erro, logar ou capturar o erro (aqui você pode adicionar logging se necessário).
+                Console.WriteLine($"Firebase authentication failed: {ex.Message}");
                 return null;
             }
         }
@@ -94,6 +112,29 @@ namespace Template.Api.Middlewares
             var errorResponse = new ErrorResponseDTO(StatusCodes.Status401Unauthorized, message, null);
 
             await context.Response.WriteAsJsonAsync(errorResponse);
+        }
+
+        // Verifica se a rota atual é o endpoint de criação/atualização de usuário.
+        public static bool IsUserCreationOrUpdateEndpoint(HttpContext context)
+        {
+            var endpoint = context.GetEndpoint();
+            if (endpoint != null)
+            {
+                // Tenta obter o ControllerActionDescriptor do metadata do endpoint.
+                var controllerActionDescriptor = endpoint.Metadata
+                    .OfType<Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor>()
+                    .FirstOrDefault();
+
+                if (controllerActionDescriptor != null)
+                {
+                    // Verifica se o ActionName corresponde ao esperado.
+                    return controllerActionDescriptor.ActionName.Equals("CreateOrUpdate", StringComparison.OrdinalIgnoreCase);
+                }
+            }
+
+            // Como fallback, verifica o caminho diretamente.
+            var path = context.Request.Path.Value ?? string.Empty;
+            return path.Contains("CreateOrUpdate", StringComparison.OrdinalIgnoreCase);
         }
     }
 

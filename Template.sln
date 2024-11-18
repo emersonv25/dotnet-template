@@ -13,7 +13,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Template.Infra.Data", "Temp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Template.Tests", "Template.Tests\Template.Tests.csproj", "{7E5EB7DB-DFD5-485A-92CF-6FD8CA4B1CEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template.Infra.Ioc", "Template.Infra.Ioc\Template.Infra.Ioc.csproj", "{989CA519-52D4-4886-93E8-0ED504414C2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Template.Infra.Ioc", "Template.Infra.Ioc\Template.Infra.Ioc.csproj", "{989CA519-52D4-4886-93E8-0ED504414C2C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FAC86BDF-7478-4B8A-BED1-7DAB33EA8BFB}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

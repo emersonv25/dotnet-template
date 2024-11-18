@@ -19,7 +19,7 @@ namespace Template.Data.Repositories
         }
         public async Task<PagedList<User>> GetAllAsync(int pageNumber, int pageSize)
         {
-            var query =  _context.Users.AsQueryable();
+            var query =  _context.Users.Where(x => x.DeletedAt == null).OrderByDescending(x => x.CreatedAt).AsQueryable();
             return await PaginationHelper.CreateAsync(query, pageNumber, pageSize); ;
         }
         public async Task<User?> GetByIdAsync(Guid id)

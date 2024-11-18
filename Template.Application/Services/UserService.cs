@@ -52,6 +52,7 @@ namespace Template.Application.Services
             if (existUser != null)
             {
                 existUser.UpdateName(userDTO.Name);
+                existUser.UpdateEmail(userDTO.Email);
                 await _userRepository.UpdateAsync(existUser, existUser.Id);
                 return existUser;
             }

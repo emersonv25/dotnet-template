@@ -12,7 +12,14 @@ using Template.Api.Filters;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configuração Firebase
 var FirebaseCredentialPath = builder.Configuration["AppSettings:FirebaseCredentialPath"];
+
+if (string.IsNullOrEmpty(FirebaseCredentialPath))
+{
+    throw new ArgumentNullException(nameof(FirebaseCredentialPath), "Firebase credential path cannot be null or empty.");
+}
 
 // Configuração Firebase
 FirebaseApp.Create(new AppOptions
@@ -27,6 +34,9 @@ builder.Services.AddInfrastructure(builder.Configuration);
 var FirebaseCredentialJson = File.ReadAllText(FirebaseCredentialPath);
 var FirebaseCredentialJsonDoc = JsonDocument.Parse(FirebaseCredentialJson);
 var Firebase_ProjectId = FirebaseCredentialJsonDoc.RootElement.GetProperty("project_id").GetString();
+
+// Registro dos serviços das camadas Application e Data
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // Configuração do JWT
 builder.Services
@@ -47,13 +57,17 @@ builder.Services
 builder.Services.AddAuthorization();
 
 // Adiciona serviços de controle
-builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ErrorResponseFilter>();
+
+}).ConfigureApiBehaviorOptions(options =>
 {
     options.InvalidModelStateResponseFactory = context =>
     {
         var errors = context.ModelState
-            .Where(e => e.Value.Errors.Count > 0)
-            .SelectMany(e => e.Value.Errors.Select(x => x.ErrorMessage))
+            .Where(e => e.Value?.Errors?.Count > 0)
+            .SelectMany(e => e.Value?.Errors?.Select(x => x.ErrorMessage) ?? Enumerable.Empty<string>())
             .ToArray();
 
         var errorResponse = new ErrorResponseDTO(StatusCodes.Status400BadRequest, "Validation failed", errors);

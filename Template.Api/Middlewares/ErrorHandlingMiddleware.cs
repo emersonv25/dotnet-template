@@ -22,36 +22,26 @@ namespace Template.Api.Middlewares
             {
                 await _next(context);
             }
-            catch (ValidationException ex)
-            {
-                _logger.LogWarning(ex, "Validation error occurred.");
-                await HandleExceptionAsync(context, HttpStatusCode.BadRequest, "Validation failed", new[] { ex.Message });
-            }
-            catch (ArgumentNullException ex)
-            {
-                _logger.LogWarning(ex, "A required argument was null.");
-                await HandleExceptionAsync(context, HttpStatusCode.BadRequest, "Required argument is missing", new[] { ex.Message });
-            }
-            catch (KeyNotFoundException ex)
-            {
-                _logger.LogWarning(ex, "Resource not found.");
-                await HandleExceptionAsync(context, HttpStatusCode.NotFound, "Resource not found", new[] { ex.Message });
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                _logger.LogWarning(ex, "Unauthorized access attempt.");
-                await HandleExceptionAsync(context, HttpStatusCode.Unauthorized, "Unauthorized access", new[] { ex.Message });
-            }
-            catch (TimeoutException ex)
-            {
-                _logger.LogError(ex, "Operation timed out.");
-                await HandleExceptionAsync(context, HttpStatusCode.GatewayTimeout, "The operation timed out", new[] { ex.Message });
-            }
             catch (Exception ex)
             {
-                // Para outras exceções, utilize um tratamento genérico
-                _logger.LogError(ex, "An unhandled exception occurred.");
-                await HandleExceptionAsync(context, HttpStatusCode.InternalServerError, "An unexpected error occurred", new[] { ex.Message });
+                // Aqui, você pode capturar as exceções de maneira genérica e formatá-las
+                ErrorResponseDTO errorResponse = ex switch
+                {
+                    ValidationException _ => new ErrorResponseDTO(400, "Validation failed", new[] { ex.Message }),
+                    ArgumentNullException _ => new ErrorResponseDTO(400, "Required argument is missing", new[] { ex.Message }),
+                    KeyNotFoundException _ => new ErrorResponseDTO(404, "Resource not found", new[] { ex.Message }),
+                    UnauthorizedAccessException _ => new ErrorResponseDTO(401, "Unauthorized access", new[] { ex.Message }),
+                    TimeoutException _ => new ErrorResponseDTO(504, "The operation timed out", new[] { ex.Message }),
+                    _ => new ErrorResponseDTO(500, "An unexpected error occurred", new[] { ex.Message })
+                };
+
+                _logger.LogError(ex, "An error occurred.");
+
+                context.Response.ContentType = "application/json";
+                context.Response.StatusCode = errorResponse.StatusCode;
+
+                // Retorna a resposta formatada
+                await context.Response.WriteAsJsonAsync(errorResponse);
             }
         }
 

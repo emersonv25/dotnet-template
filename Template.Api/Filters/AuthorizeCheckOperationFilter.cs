@@ -9,7 +9,13 @@ public class AuthorizeCheckOperationFilter : IOperationFilter
 {
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        var hasAuthorize = context.MethodInfo.DeclaringType.GetCustomAttributes(true)
+        var declaringType = context.MethodInfo.DeclaringType;
+        if (declaringType == null)
+        {
+            return;
+        }
+
+        var hasAuthorize = declaringType.GetCustomAttributes(true)
             .OfType<AuthorizeAttribute>().Any() ||
             context.MethodInfo.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any();
 

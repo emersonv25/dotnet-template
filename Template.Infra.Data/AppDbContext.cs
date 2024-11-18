@@ -28,6 +28,7 @@ namespace Template.Data
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+            modelBuilder.HasPostgresExtension("uuid-ossp");
         }
 
     }
