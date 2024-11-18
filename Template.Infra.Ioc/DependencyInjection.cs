@@ -6,8 +6,9 @@ using Template.Data.Repositories;
 using Template.Data;
 using Template.Domain.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using Template.Infra.Data.Services;
 
-namespace Template.Api
+namespace Template.Infra.Ioc
 {
     public static class DependencyInjection
     {
@@ -21,11 +22,15 @@ namespace Template.Api
                 options.UseNpgsql(connectionString, b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
             });
 
+
             //Repositories
             services.AddScoped<IUserRepository, UserRepository>();
 
             //Services
             services.AddScoped<IUserService, UserService>();
+
+            // Firebase
+            services.AddSingleton<FirebaseService>();
 
             return services;
         }

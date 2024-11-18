@@ -1,55 +1,35 @@
-using FirebaseAdmin;
-using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text.Json;
 using Template.Api.Middlewares;
 using Microsoft.OpenApi.Models;
-using Template.Api;
 using Microsoft.AspNetCore.Mvc;
 using Template.Api.DTOs;
 using Template.Api.Filters;
+using Template.Infra.Ioc;
+using Template.Infra.Data.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuração Firebase
-var FirebaseCredentialPath = builder.Configuration["AppSettings:FirebaseCredentialPath"];
-
-if (string.IsNullOrEmpty(FirebaseCredentialPath))
-{
-    throw new ArgumentNullException(nameof(FirebaseCredentialPath), "Firebase credential path cannot be null or empty.");
-}
-
-// Configuração Firebase
-FirebaseApp.Create(new AppOptions
-{
-    Credential = GoogleCredential.FromFile(FirebaseCredentialPath)
-});
-
-// Registro dos serviços das camadas Application e Data
+// Registro dos serviços/repositorios
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// Lê o arquivo JSON para obter o ProjectID
-var FirebaseCredentialJson = File.ReadAllText(FirebaseCredentialPath);
-var FirebaseCredentialJsonDoc = JsonDocument.Parse(FirebaseCredentialJson);
-var Firebase_ProjectId = FirebaseCredentialJsonDoc.RootElement.GetProperty("project_id").GetString();
-
-// Registro dos serviços das camadas Application e Data
-builder.Services.AddInfrastructure(builder.Configuration);
+var firebaseService = new FirebaseService(builder.Configuration);
 
 // Configuração do JWT
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = $"https://securetoken.google.com/{Firebase_ProjectId}";
+        var firebaseProjectId = firebaseService.GetProjectId();
+
+        options.Authority = $"https://securetoken.google.com/{firebaseProjectId}";
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
-            ValidIssuer = $"https://securetoken.google.com/{Firebase_ProjectId}",
+            ValidIssuer = $"https://securetoken.google.com/{firebaseProjectId}",
             ValidateAudience = true,
-            ValidAudience = $"{Firebase_ProjectId}",
+            ValidAudience = $"{firebaseProjectId}",
             ValidateLifetime = true
         };
     });

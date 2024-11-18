@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using Template.Api.DTOs;
-using Template.Api.Extension;
 using Template.Application.DTOs;
 using Template.Application.Interfaces;
-using Template.Application.Services;
-using Template.Domain.Entities;
-using Template.Domain.Interfaces;
 
 namespace Template.Api.Controllers
 {
