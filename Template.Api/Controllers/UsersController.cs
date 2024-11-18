@@ -55,13 +55,10 @@ namespace Template.Api.Controllers
 
         [HttpGet("All")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAllAsync([FromQuery]PagionationParamsDTO pagionationParams)
+        public async Task<IActionResult> GetAllAsync([FromQuery] PaginationParamsDTO paginationParams)
         {
-            var usersDTO = await _userService.GetAllAsync(pagionationParams.PageNumber, pagionationParams.PageSize);
-
-            var result = new PaginationResultDTO<UserDTO>(usersDTO, usersDTO.CurrentPage, usersDTO.PageSize, usersDTO.TotalCount, usersDTO.TotalPages);
-            
-            return Ok(result);
+            var result = await _userService.GetAllAsync(paginationParams.PageNumber, paginationParams.PageSize);
+            return Ok(result); 
         }
 
         [HttpPost]

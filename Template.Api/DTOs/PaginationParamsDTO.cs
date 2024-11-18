@@ -2,7 +2,7 @@
 
 namespace Template.Api.DTOs
 {
-    public class PagionationParamsDTO
+    public class PaginationParamsDTO
     {
         [Range(1, int.MaxValue, ErrorMessage = "the minimum page number is 1")]
         public int PageNumber { get; set; }
@@ -19,23 +19,6 @@ namespace Template.Api.DTOs
 
         public PaginationHeaderDTO(int currentPage, int itemsPerPage, int totalItems, int totalPages)
         {
-            CurrentPage = currentPage;
-            ItemsPerPage = itemsPerPage;
-            TotalItems = totalItems;
-            TotalPages = totalPages;
-        }
-    }
-    public class PaginationResultDTO<T>
-    {
-        public List<T> Items { get; set; } = new List<T>();
-        public int CurrentPage { get; set; }
-        public int ItemsPerPage { get; set; }
-        public int TotalItems { get; set; }
-        public int TotalPages { get; set; }
-
-        public PaginationResultDTO(List<T> items, int currentPage, int itemsPerPage, int totalItems, int totalPages)
-        {
-            Items = items;
             CurrentPage = currentPage;
             ItemsPerPage = itemsPerPage;
             TotalItems = totalItems;

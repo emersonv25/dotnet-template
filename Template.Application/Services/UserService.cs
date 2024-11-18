@@ -5,26 +5,36 @@ using System.Threading.Tasks;
 using Template.Application.DTOs;
 using System.ComponentModel.DataAnnotations;
 using Template.Domain.Pagination;
-using AutoMapper;
+using Template.Infra.Data.Helpers;
 
 namespace Template.Application.Services
 {
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepository, IMapper mapper)
+        public UserService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-            _mapper = mapper;
         }
 
-        public async Task<PagedList<UserDTO>> GetAllAsync(int pageNumber, int pageSize)
+        public async Task<PaginatedResponseDTO<UserDTO>> GetAllAsync(int pageNumber, int pageSize)
         {
-            var users = await _userRepository.GetAllAsync(pageNumber, pageSize);
-            var dto = _mapper.Map<IEnumerable<UserDTO>>(users);
-            return new PagedList<UserDTO>(dto, pageNumber, pageSize, users.Count);
+            // Obtém o PagedList<User> do repositório
+            var pagedUsers = await _userRepository.GetAllAsync(pageNumber, pageSize);
+
+            // Mapeia os itens para UserDTO
+            var userDTOs = pagedUsers.Select(user => new UserDTO(user)).ToList();  // Acessando diretamente pagedUsers
+
+            var result = new PaginatedResponseDTO<UserDTO>(
+                userDTOs,
+                pagedUsers.CurrentPage,
+                pagedUsers.PageSize,
+                pagedUsers.TotalCount,
+                pagedUsers.TotalPages
+            );
+
+            return result;
         }
 
         public async Task<User?> GetUserByFirebaseIdAsync(string firebaseId)
@@ -46,7 +56,7 @@ namespace Template.Application.Services
                 return existUser;
             }
 
-            var newUser = new CreateUser(userDTO, firebaseId);
+            var newUser = userDTO.ToEntity(firebaseId);
             await _userRepository.AddAsync(newUser, null);
             return newUser;
         }

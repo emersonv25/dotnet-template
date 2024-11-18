@@ -6,7 +6,6 @@ using Template.Data.Repositories;
 using Template.Data;
 using Template.Domain.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
-using Template.Application.Mappings;
 
 namespace Template.Api
 {
@@ -27,9 +26,6 @@ namespace Template.Api
 
             //Services
             services.AddScoped<IUserService, UserService>();
-
-            // Auto Mapper
-            services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
 
             return services;
         }
