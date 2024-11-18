@@ -4,9 +4,9 @@ namespace Template.Api.DTOs
 {
     public class PaginationParamsDTO
     {
-        [Range(1, int.MaxValue, ErrorMessage = "the minimum page number is 1")]
+        [Range(1, int.MaxValue, ErrorMessage = "O número minimo por paginas é 1")]
         public int PageNumber { get; set; }
-        [Range(1, 50, ErrorMessage = "the maximum number per page is 50")]
+        [Range(1, 50, ErrorMessage = "O número máximo por pagina é 50")]
         public int PageSize { get; set; }
     }
 

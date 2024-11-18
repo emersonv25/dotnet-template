@@ -6,12 +6,12 @@ namespace Template.Application.DTOs
     public class UserDTO
     {
         [Required]
-        [StringLength(100, ErrorMessage = "Max lenght is 100")]
+        [StringLength(100, ErrorMessage = "Tamanho máximo é 100")]
         public string Name { get; set; }
 
         [Required]
         [EmailAddress]
-        [StringLength (255, ErrorMessage = "Max lenght is 255")]
+        [StringLength (255, ErrorMessage = "Tamanho máximo é 255")]
         public string Email { get; set; }
 
         public UserDTO() { }

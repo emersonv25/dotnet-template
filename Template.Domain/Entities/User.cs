@@ -19,7 +19,7 @@ namespace Template.Domain.Entities
         public void UpdateName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("Name cannot be empty.", nameof(name));
+                throw new ArgumentException("Nome não pode ser vazio", nameof(name));
 
             Name = name;
         }
@@ -27,7 +27,7 @@ namespace Template.Domain.Entities
         public void UpdateEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email) || !IsValidEmail(email))
-                throw new ArgumentException("Email is invalid.", nameof(email));
+                throw new ArgumentException("Email inválidop.", nameof(email));
 
             Email = email;
         }
@@ -35,7 +35,7 @@ namespace Template.Domain.Entities
         public void UpdateFirebaseId(string firebaseId)
         {
             if (string.IsNullOrWhiteSpace(firebaseId))
-                throw new ArgumentException("FirebaseId cannot be empty.", nameof(firebaseId));
+                throw new ArgumentException("FirebaseId não pode ser vazio.", nameof(firebaseId));
 
             FirebaseId = firebaseId;
         }

@@ -37,7 +37,7 @@ namespace Template.Api.Controllers
             var user = await _userService.GetUserByFirebaseIdAsync(firebaseid);
             if(user is null)
             {
-                return NotFound("User not found");
+                return NotFound("Usuário não encontrado");
             }
             return Ok(user);
         }
@@ -63,7 +63,7 @@ namespace Template.Api.Controllers
         {
             if (FirebaseId == null)
             {
-                throw new UnauthorizedAccessException("Unathorized: User not logged");
+                throw new UnauthorizedAccessException("Acesso Negado: Usuário não logado");
             }
 
             var createdUser = await _userService.CreateOrUpdateUser(userDTO, FirebaseId);

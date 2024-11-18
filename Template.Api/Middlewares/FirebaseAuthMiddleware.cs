@@ -43,7 +43,7 @@ namespace Template.Api.Middlewares
             if (firebaseUser == null)
             {
                 // Retorna resposta de erro 401 caso o token seja inválido ou expirado.
-                await RespondUnauthorizedAsync(context, "Unauthorized: Invalid or expired token.");
+                await RespondUnauthorizedAsync(context, "Acesso Negado: Token inválido ou expirado.");
                 return;
             }
 
@@ -69,7 +69,7 @@ namespace Template.Api.Middlewares
                 else if (!isUserCreateEndpoint)
                 {
                     // Retorna 401 para outros endpoints.
-                    await RespondUnauthorizedAsync(context, "Unauthorized: User not found.");
+                    await RespondUnauthorizedAsync(context, "Acesso Negado: Usuário não cadastrado");
                     return;
                 }
             }
