@@ -18,7 +18,23 @@ Apenas cadastro de usuários e autenticação com o Firebase, e EF Core com Post
 
 ## Configuração do Projeto
 
-Para aplicar migrations e atualizar o banco de dados, execute o seguinte comando:
+### Arquivo de configuração do Firebase
+Como o projeto usa o firebase, ele depende de ter o arquivo de configuração do firebase
+
+Baixe o arquivo de configuração no console do firebase em:
+
+Configuração do Projeto > Contas de Serviço > SDK Admin do Firebase > Gerar nova chave privada
+
+Após baixar o arquivo, cole em algum diretório dentro do projeto, e edite o caminho para o arquivo no appsettings.json na váriavel FirebaseCredentialPath
+
+Exemplo:
+```
+  "AppSettings": {
+    "FirebaseCredentialPath": "./firebase-service-account.json"
+  },
+```
+
+### Comandos de Migration
 
 ```bash
 dotnet ef migrations add StartMigration --project Template.Infra.Data --startup-project Template.Api
@@ -31,8 +47,9 @@ dotnet ef database update --project Template.Infra.Data --startup-project Templa
 
 ### Contribuidores
 
-- [matheus55391](https://github.com/matheus55391)
-- [emersonv25](https://github.com/emersonv25)
+- [emersonv25](https://github.com/emersonv25) Aprimorei o projeto e a arquitetura e transformei em um template básico apenas com entidade User padrão.
+- [matheus55391](https://github.com/matheus55391) Iniciou o projeto com principios arquitetura em camada: projeto original: (https://github.com/matheus55391/partilha-api)
+
 
 ## Licença
 
