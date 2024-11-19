@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -10,16 +10,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="6.0.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
-    <PackageReference Include="xunit" Version="2.9.2" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="FluentAssertions" Version="6.12.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.10" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="xunit" Version="2.5.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Template.Api\Template.Api.csproj" />
+    <ProjectReference Include="..\Template.Application\Template.Application.csproj" />
+    <ProjectReference Include="..\Template.Domain\Template.Domain.csproj" />
+    <ProjectReference Include="..\Template.Infra.Data\Template.Infra.Data.csproj" />
+    <ProjectReference Include="..\Template.Infra.Services\Template.Infra.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,13 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Template.Api\Template.Api.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Template.Infra.Data.Tests\" />
-    <Folder Include="Template.Application.Tests\" />
-    <Folder Include="Template.Api.Test\" />
+    <Folder Include="Api\" />
+    <Folder Include="Domain\" />
+    <Folder Include="Infra\Services\" />
   </ItemGroup>
 
 </Project>
