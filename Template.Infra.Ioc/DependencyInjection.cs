@@ -33,6 +33,9 @@ namespace Template.Infra.Ioc
             // Firebase
             services.AddSingleton<IFirebaseService, FirebaseService>();
 
+            //Cache
+            services.AddMemoryCache();
+
             return services;
         }
     }

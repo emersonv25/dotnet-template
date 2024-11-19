@@ -6,6 +6,7 @@ using Template.Api.DTOs;
 using Template.Application.DTOs;
 using FirebaseAdmin.Messaging;
 using Template.Domain.Interfaces.Services;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Template.Api.Middlewares
 {
@@ -13,12 +14,16 @@ namespace Template.Api.Middlewares
     {
         private readonly RequestDelegate _next;
         private readonly IFirebaseService _firebaseService;
+        private readonly IMemoryCache _memoryCache;
 
 
-        public FirebaseAuthMiddleware(RequestDelegate next, IFirebaseService firebaseService)
+
+
+        public FirebaseAuthMiddleware(RequestDelegate next, IFirebaseService firebaseService, IMemoryCache memoryCache)
         {
             _next = next;
             _firebaseService = firebaseService;
+            _memoryCache = memoryCache;
 
         }
 
@@ -51,32 +56,42 @@ namespace Template.Api.Middlewares
                 return;
             }
 
-            // Tenta buscar o usuário correspondente no sistema.
-            var user = await userService.GetUserByFirebaseIdAsync(firebaseUser.Id);
-            // Permitir acesso ao endpoint de criação/atualização de usuário mesmo que o usuário não esteja no banco.
-            if (user == null)
+            // Tenta buscar o usuário correspondente no cache do sistema.
+            User? user = null;
+            var cacheKey = $"user:{firebaseUser.Id}";
+            if (!_memoryCache.TryGetValue(cacheKey, out user))
             {
-                var isUserCreateEndpoint = IsUserCreationOrUpdateEndpoint(context);
+                user = await userService.GetUserByFirebaseIdAsync(firebaseUser.Id);
 
-
-                if (!string.IsNullOrWhiteSpace(firebaseUser.Name) && !string.IsNullOrWhiteSpace(firebaseUser.Email))
+                if (user == null)
                 {
-                    user = await userService.CreateOrUpdateUser(new UserDTO(firebaseUser.Name, firebaseUser.Email), firebaseUser.Id);
+                    // Permitir acesso ao endpoint de criação/atualização de usuário mesmo que o usuário não esteja no banco.
+                    var isUserCreateEndpoint = IsUserCreationOrUpdateEndpoint(context);
 
-                    if(isUserCreateEndpoint)
+                    if (!string.IsNullOrWhiteSpace(firebaseUser.Name) && !string.IsNullOrWhiteSpace(firebaseUser.Email))
                     {
-                        context.Response.StatusCode = StatusCodes.Status200OK;
-                        await context.Response.WriteAsJsonAsync(user);
+                        user = await userService.CreateOrUpdateUser(new UserDTO(firebaseUser.Name, firebaseUser.Email), firebaseUser.Id);
+
+                        _memoryCache.Set(cacheKey, user, TimeSpan.FromMinutes(60));
+
+                        if (isUserCreateEndpoint)
+                        {
+                            context.Response.StatusCode = StatusCodes.Status200OK;
+                            await context.Response.WriteAsJsonAsync(user);
+                            return;
+                        }
+                    }
+                    else if (!isUserCreateEndpoint)
+                    {
+                        // Retorna 401 para outros endpoints.
+                        await RespondUnauthorizedAsync(context, "Acesso Negado: Usuário não cadastrado");
                         return;
                     }
                 }
-                else if (!isUserCreateEndpoint)
-                {
-                    // Retorna 401 para outros endpoints.
-                    await RespondUnauthorizedAsync(context, "Acesso Negado: Usuário não cadastrado");
-                    return;
-                }
+
+                _memoryCache.Set(cacheKey, user, TimeSpan.FromMinutes(60));
             }
+
 
             // Adiciona o usuário ao contexto da requisição para ser acessado em outros lugares.
             context.Items["FirebaseId"] = firebaseUser.Id;
