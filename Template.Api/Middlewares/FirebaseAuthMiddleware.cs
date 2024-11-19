@@ -1,21 +1,25 @@
-﻿using FirebaseAdmin.Auth;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Template.Application.Interfaces;
 using Template.Domain.Entities;
 using System.Threading.Tasks;
 using Template.Api.DTOs;
 using Template.Application.DTOs;
 using FirebaseAdmin.Messaging;
+using Template.Domain.Interfaces.Services;
 
 namespace Template.Api.Middlewares
 {
     public class FirebaseAuthMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly IFirebaseService _firebaseService;
 
-        public FirebaseAuthMiddleware(RequestDelegate next)
+
+        public FirebaseAuthMiddleware(RequestDelegate next, IFirebaseService firebaseService)
         {
             _next = next;
+            _firebaseService = firebaseService;
+
         }
 
         public async Task InvokeAsync(HttpContext context, IUserService userService)
@@ -90,14 +94,13 @@ namespace Template.Api.Middlewares
         {
             try
             {
-                // Verifica o token Firebase de maneira assíncrona.
-                var decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(tokenValue);
+                var decodedToken = await _firebaseService.VerifyIdTokenAsync(tokenValue);
                 var email = decodedToken.Claims.TryGetValue("email", out var emailClaim) ? emailClaim.ToString() : string.Empty;
                 var name = decodedToken.Claims.TryGetValue("name", out var nameClaim) ? nameClaim.ToString() : string.Empty;
-                // Retorna o usuário do Firebase.
+
                 return new FirebaseUserDTO(decodedToken.Uid, email, name);
             }
-            catch (FirebaseAuthException ex)
+            catch (UnauthorizedAccessException ex)
             {
                 Console.WriteLine($"Firebase authentication failed: {ex.Message}");
                 return null;

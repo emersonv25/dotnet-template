@@ -1,4 +1,5 @@
 ﻿using FirebaseAdmin;
+using FirebaseAdmin.Auth;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -41,7 +42,17 @@ namespace Template.Infra.Data.Services
                 _firebaseApp = FirebaseApp.DefaultInstance; // Usa a instância existente
             }
         }
-
+        public async Task<FirebaseToken> VerifyIdTokenAsync(string token)
+        {
+            try
+            {
+                return await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(token);
+            }
+            catch (FirebaseAuthException ex)
+            {
+                throw new UnauthorizedAccessException("Invalid Firebase token.", ex);
+            }
+        }
         public string GetProjectId() => _projectId;
 
         public FirebaseApp GetFirebaseApp() => _firebaseApp;

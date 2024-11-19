@@ -1,4 +1,5 @@
 ﻿using FirebaseAdmin;
+using FirebaseAdmin.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,7 @@ namespace Template.Domain.Interfaces.Services
     {
         FirebaseApp GetFirebaseApp();
         string GetProjectId();
+        Task<FirebaseToken> VerifyIdTokenAsync(string token);
+
     }
 }
