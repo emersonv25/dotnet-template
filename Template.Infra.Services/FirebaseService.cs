@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Template.Domain.Interfaces.Services;
 
 namespace Template.Infra.Data.Services
 {
-    public class FirebaseService
+    public class FirebaseService : IFirebaseService
     {
         private readonly FirebaseApp _firebaseApp;
         private readonly string _firebaseCredentialPath;

@@ -10,6 +10,7 @@
     <ProjectReference Include="..\Template.Application\Template.Application.csproj" />
     <ProjectReference Include="..\Template.Infra.Data\Template.Infra.Data.csproj" />
     <ProjectReference Include="..\Template.Domain\Template.Domain.csproj" />
+    <ProjectReference Include="..\Template.Infra.Services\Template.Infra.Services.csproj" />
   </ItemGroup>
 
 </Project>

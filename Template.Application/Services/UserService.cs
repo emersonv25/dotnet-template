@@ -6,6 +6,7 @@ using Template.Application.DTOs;
 using System.ComponentModel.DataAnnotations;
 using Template.Domain.Pagination;
 using Template.Infra.Data.Helpers;
+using Template.Domain.Interfaces.Services;
 
 namespace Template.Application.Services
 {

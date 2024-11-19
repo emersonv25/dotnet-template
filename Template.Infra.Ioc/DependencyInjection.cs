@@ -7,6 +7,7 @@ using Template.Data;
 using Template.Domain.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Template.Infra.Data.Services;
+using Template.Domain.Interfaces.Services;
 
 namespace Template.Infra.Ioc
 {
@@ -30,7 +31,7 @@ namespace Template.Infra.Ioc
             services.AddScoped<IUserService, UserService>();
 
             // Firebase
-            services.AddSingleton<FirebaseService>();
+            services.AddSingleton<IFirebaseService, FirebaseService>();
 
             return services;
         }
