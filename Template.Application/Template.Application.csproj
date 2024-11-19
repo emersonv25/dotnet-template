@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Template.Domain\Template.Domain.csproj" />
     <ProjectReference Include="..\Template.Infra.Data\Template.Infra.Data.csproj" />
     <ProjectReference Include="..\Template.Infra.Services\Template.Infra.Services.csproj" />

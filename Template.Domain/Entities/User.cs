@@ -5,10 +5,11 @@ namespace Template.Domain.Entities
 {
     public class User : BaseEntity
     {
-        public string Name { get; private set; }
-        public string Email { get; private set; }
-        public string FirebaseId { get; private set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string FirebaseId { get; set; }
 
+        public User() { }
         public User(string name, string email, string firebaseId)
         {
             Name = name;

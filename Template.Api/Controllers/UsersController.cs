@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using Template.Api.DTOs;
 using Template.Application.DTOs;
 using Template.Application.Interfaces;
+using Template.Domain.Entities;
 
 namespace Template.Api.Controllers
 {
@@ -19,6 +21,8 @@ namespace Template.Api.Controllers
 
         [HttpGet("{userId}")]
         [AllowAnonymous]
+        [SwaggerOperation(Summary = "Retorna um usuário baseado no seu Id")]
+        [SwaggerResponse(200, "Usuário", typeof(User))]
         public async Task<IActionResult> GetUserProfile(Guid userId)
         {
             var user = await _userService.GetUserByIdAsync(userId);
@@ -27,6 +31,8 @@ namespace Template.Api.Controllers
 
         [HttpGet("firebase/{firebaseid}")]
         [AllowAnonymous]
+        [SwaggerOperation(Summary = "Retorna um usuário baseado no seu FirebaseID")]
+        [SwaggerResponse(200, "Usuário", typeof(User))]
         public async Task<IActionResult> GetUserFirebaseProfile(string firebaseid)
         {
             var user = await _userService.GetUserByFirebaseIdAsync(firebaseid);
@@ -39,14 +45,19 @@ namespace Template.Api.Controllers
 
 
         [HttpGet("LoggedUser")]
+        [SwaggerOperation(Summary = "Retorna o usuário atual autenticado")]
+        [SwaggerResponse(200, "Usuário atual autenticado", typeof(User))]
         public IActionResult GetLoggedUser()
         {
             var user = CurrentUser;
             return Ok(user);
         }
 
+
         [HttpGet("All")]
         [AllowAnonymous]
+        [SwaggerOperation(Summary = "Retorna uma lista de usuários paginada")]
+        [SwaggerResponse(200, "Uma lista de usuários retornado", typeof(PaginatedResponseDTO<UserDTO>))]
         public async Task<IActionResult> GetAllAsync([FromQuery] PaginationParamsDTO paginationParams)
         {
             var result = await _userService.GetAllAsync(paginationParams.PageNumber, paginationParams.PageSize);
@@ -54,6 +65,8 @@ namespace Template.Api.Controllers
         }
 
         [HttpPut("CreateOrUpdate")]
+        [SwaggerOperation(Summary = "Cria ou atualiza um usuário", Description = "Cria ou atualiza um usuário com base nos dados fornecidos. Retorna o usuário criado ou atualizado.")]
+        [SwaggerResponse(200, "Usuário criado ou atualizado com sucesso", typeof(User))]
         public async Task<IActionResult> CreateOrUpdateUser([FromBody] UserDTO userDTO)
         {
             if (FirebaseId == null)
@@ -64,7 +77,5 @@ namespace Template.Api.Controllers
             var createdUser = await _userService.CreateOrUpdateUser(userDTO, FirebaseId);
             return Ok(createdUser);
         }
-
-        // Outros métodos ainda não implementados
     }
 }
