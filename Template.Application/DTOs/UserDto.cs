@@ -7,13 +7,13 @@ namespace Template.Application.DTOs
     public class UserDTO
     {
         [Required]
-        [StringLength(100, ErrorMessage = "Tamanho máximo é 100")]
+        [StringLength(256, ErrorMessage = "Tamanho máximo de caracteres é 255")]
         [SwaggerSchema(Description = "Nome do usuário")]
         public string Name { get; set; }
 
         [Required]
         [EmailAddress]
-        [StringLength(255, ErrorMessage = "Tamanho máximo é 255")]
+        [StringLength(255, ErrorMessage = "Tamanho máximo de caracteres é 255")]
         [SwaggerSchema(Description = "Email do usuário")]
         public string Email { get; set; }
 

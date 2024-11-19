@@ -10,7 +10,7 @@ namespace Template.Data.Mappings
         {
             builder.ToTable("Users");
 
-            builder.Property(u => u.Name).IsRequired().HasMaxLength(100);
+            builder.Property(u => u.Name).IsRequired().HasMaxLength(256);
             builder.Property(u => u.Email).IsRequired().HasMaxLength(255);
             builder.Property(u => u.FirebaseId).IsRequired().HasMaxLength(255);
 
