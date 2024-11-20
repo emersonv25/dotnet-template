@@ -22,7 +22,7 @@ namespace Template.Api.Controllers
         [HttpGet("{userId}")]
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Retorna um usuário baseado no seu Id")]
-        [SwaggerResponse(200, "Usuário", typeof(User))]
+        [SwaggerResponse(200, "Usuário encontrado", typeof(User))]
         public async Task<IActionResult> GetUserProfile(Guid userId)
         {
             var user = await _userService.GetUserByIdAsync(userId);
@@ -32,7 +32,7 @@ namespace Template.Api.Controllers
         [HttpGet("firebase/{firebaseid}")]
         [AllowAnonymous]
         [SwaggerOperation(Summary = "Retorna um usuário baseado no seu FirebaseID")]
-        [SwaggerResponse(200, "Usuário", typeof(User))]
+        [SwaggerResponse(200, "Usuário encontrado", typeof(User))]
         public async Task<IActionResult> GetUserFirebaseProfile(string firebaseid)
         {
             var user = await _userService.GetUserByFirebaseIdAsync(firebaseid);
@@ -65,7 +65,7 @@ namespace Template.Api.Controllers
         }
 
         [HttpPut("CreateOrUpdate")]
-        [SwaggerOperation(Summary = "Cria ou atualiza um usuário", Description = "Cria ou atualiza um usuário com base nos dados fornecidos. Retorna o usuário criado ou atualizado.")]
+        [SwaggerOperation(Summary = "Cria ou atualiza um usuário")]
         [SwaggerResponse(200, "Usuário criado ou atualizado com sucesso", typeof(User))]
         public async Task<IActionResult> CreateOrUpdateUser([FromBody] UserDTO userDTO)
         {
