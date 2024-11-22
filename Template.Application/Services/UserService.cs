@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using Template.Domain.Pagination;
 using Template.Infra.Data.Helpers;
 using Template.Domain.Interfaces.Services;
+using Template.Application.Mappers;
 
 namespace Template.Application.Services
 {
@@ -52,8 +53,7 @@ namespace Template.Application.Services
             var existUser = await _userRepository.GetByFirebaseIdAsync(firebaseId);
             if (existUser != null)
             {
-                existUser.UpdateName(userDTO.Name);
-                existUser.UpdateEmail(userDTO.Email);
+                existUser.UpdateUserInfo(userDTO.Name, userDTO.Email);
                 await _userRepository.UpdateAsync(existUser, existUser.Id);
                 return existUser;
             }

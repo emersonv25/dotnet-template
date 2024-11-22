@@ -29,11 +29,6 @@ namespace Template.Application.DTOs
             Name = user.Name;
             Email = user.Email;
         }
-
-        public User ToEntity(string firebaseId)
-        {
-            return new User(Name, Email, firebaseId);
-        }
     }
 
 }

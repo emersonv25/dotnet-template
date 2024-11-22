@@ -67,7 +67,7 @@ namespace Template.Api.Controllers
         [HttpPut("CreateOrUpdate")]
         [SwaggerOperation(Summary = "Cria ou atualiza um usuário")]
         [SwaggerResponse(200, "Usuário criado ou atualizado com sucesso", typeof(User))]
-        public async Task<IActionResult> CreateOrUpdateUser([FromBody] UserDTO userDTO)
+        public async Task<IActionResult> CreateOrUpdate([FromBody] UserDTO userDTO)
         {
             if (FirebaseId == null)
             {

@@ -153,7 +153,7 @@ namespace Template.Tests.Application.Services
             var userDTO = new UserDTO("John Updated", "johnupdated@example.com");
             var existingUser = new User("John Doe", "john@example.com", firebaseId);
 
-            existingUser.UpdateUserInfo(userDTO.Name, userDTO.Email, firebaseId);
+            existingUser.UpdateUserInfo(userDTO.Name, userDTO.Email);
 
             _mockUserService.Setup(service => service.CreateOrUpdateUser(userDTO, firebaseId))
                             .ReturnsAsync(existingUser);
